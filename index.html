@@ -5,6 +5,11 @@
         <link rel="Shortcut Icon" href="https://i.pinimg.com/236x/a5/20/de/a520deb545fea9b62776e6bea5d77928.jpg" type="image/x-icon" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <meta name="screen-orientation" content="landscape">
+        <meta name="x5-orientation" content="landscape">
+        <meta name="full-screen" content="yes">
+        <meta name="x5-fullscreen" content="true">
         <!--<meta itemprop="image" content="./images/fenxiang.png" />-->
         <style>
             html {
@@ -162,6 +167,101 @@
                 20% { opacity: 1; transform: translateX(-50%) translateY(0); }
                 80% { opacity: 1; transform: translateX(-50%) translateY(0); }
                 100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+            }
+            
+            /* Mobile Responsive Design */
+            @media screen and (max-width: 768px) {
+                body {
+                    font-size: 16px;
+                    line-height: 1.5;
+                }
+                
+                .canvas {
+                    width: 100vw !important;
+                    height: 100vh !important;
+                }
+                
+                img#logo {
+                    width: 80px;
+                    margin-top: 10px;
+                    margin-bottom: 10px;
+                }
+                
+                .text {
+                    bottom: 10px;
+                    font-size: 14px;
+                }
+                
+                .birthday-box {
+                    padding: 20px;
+                    max-width: 90%;
+                    width: 90%;
+                }
+                
+                .birthday-box h2 {
+                    font-size: 20px;
+                    margin-bottom: 15px;
+                }
+                
+                .birthday-message {
+                    font-size: 16px;
+                    min-height: 100px;
+                }
+                
+                .text-right {
+                    bottom: 30px;
+                    font-size: 14px;
+                }
+            }
+            
+            /* Landscape orientation for mobile */
+            @media screen and (max-width: 768px) and (orientation: landscape) {
+                body {
+                    font-size: 14px;
+                }
+                
+                img#logo {
+                    width: 60px;
+                    margin-top: 5px;
+                    margin-bottom: 5px;
+                }
+                
+                .text {
+                    bottom: 5px;
+                    font-size: 12px;
+                }
+                
+                .birthday-box {
+                    padding: 15px;
+                    max-width: 80%;
+                }
+                
+                .birthday-box h2 {
+                    font-size: 18px;
+                    margin-bottom: 10px;
+                }
+                
+                .birthday-message {
+                    font-size: 14px;
+                    min-height: 80px;
+                }
+            }
+            
+            /* Force landscape on mobile */
+            @media screen and (max-width: 768px) {
+                html, body {
+                    width: 100vw;
+                    height: 100vh;
+                    overflow: hidden;
+                }
+                
+                .canvas {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100vw !important;
+                    height: 100vh !important;
+                }
             }
         </style>
     
@@ -830,6 +930,62 @@
         } else {
             initAudio();
         }
+        
+        // Force landscape orientation on mobile
+        function forceLandscape() {
+            if (window.innerWidth < window.innerHeight && window.innerWidth <= 768) {
+                // Show landscape message
+                const message = document.createElement('div');
+                message.id = 'landscapeMessage';
+                message.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100vw;
+                    height: 100vh;
+                    background: linear-gradient(135deg, #ff69b4, #ff1493);
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 10000;
+                    color: white;
+                    font-size: 18px;
+                    text-align: center;
+                    padding: 20px;
+                `;
+                message.innerHTML = `
+                    <div style="font-size: 48px; margin-bottom: 20px;">📱</div>
+                    <h2>Vui lòng xoay ngang điện thoại</h2>
+                    <p>Để có trải nghiệm tốt nhất</p>
+                `;
+                document.body.appendChild(message);
+                
+                // Hide message when landscape
+                function checkOrientation() {
+                    if (window.innerWidth > window.innerHeight) {
+                        const msg = document.getElementById('landscapeMessage');
+                        if (msg) {
+                            msg.style.display = 'none';
+                        }
+                    } else {
+                        const msg = document.getElementById('landscapeMessage');
+                        if (msg) {
+                            msg.style.display = 'flex';
+                        }
+                    }
+                }
+                
+                window.addEventListener('resize', checkOrientation);
+                window.addEventListener('orientationchange', checkOrientation);
+                checkOrientation();
+            }
+        }
+        
+        // Initialize landscape force
+        forceLandscape();
+        window.addEventListener('resize', forceLandscape);
+        window.addEventListener('orientationchange', forceLandscape);
     </script>
     <div>
         <audio id="backgroundMusic" autoplay loop preload="auto" muted style="display: none;">
