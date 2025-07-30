@@ -1,0 +1,54 @@
+
+Xem hướng dẫn trên ytb devpan
+
+#Sửa CSS
+canvas {
+   position: absolute;
+   top: 0;
+   left: 0;
+   z-index: 0;
+}
+
+#Thêm vào HTML
+<canvas id="rainCanvas"></canvas>
+
+#Thêm vào script
+<script>
+        const canvas = document.getElementById('rainCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        const letters = 'I LOVE U'.split('');
+        const fontSize = 16;
+        let columns = Math.floor(window.innerWidth / fontSize);
+        const drops = Array(columns).fill(1);
+
+        function drawRainBackground() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#f584b7';
+            ctx.font = fontSize + 'px arial';
+            for (let i = 0; i < drops.length; i++) {
+                const text = letters[Math.floor(Math.random() * letters.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height || Math.random() > 0.95) drops[i] = 0;
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawRainBackground, 50);
+</script>
+
+#Thêm vào script
+const audio = new Audio("./Ly.mp3");
+function handleClick() {
+   audio.play();
+   window.removeEventListener('click', handleClick);
+}
+window.addEventListener('click', handleClick);
